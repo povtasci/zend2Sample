@@ -1,0 +1,213 @@
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-home"></i> Dashboard <span>> Edit Post</span>
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+<div class="col-sm-12">
+<form action="<?php echo $this->url("admin-action", array("action" => "save-book", "id" => $this->book->getId())); ?>" method="post" class="ajaxForm">
+    <div class="col-sm-12 col-md-12 col-lg-9">
+        <div class="jarviswidget jarviswidget-sortable">
+            <header role="heading">
+                <h2><strong>Book Fields</strong></h2>
+                <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
+            </header>
+            <div role="content">
+                <div class="widget-body padding-10">
+                    <div class="smart-form">
+                        <section>
+                            <label class="label" for="book_title">Title</label>
+                            <label class="input">
+                                <input type="text" id="book_title" name="book_title" value="<?php echo $this->book->getTitle(); ?>" />
+                            </label>
+                        </section>
+                        <section>
+                            <label class="label" for="book_description">Short Description</label>
+                            <label class="textarea textarea-resizable">
+                                <textarea rows="6" name="book_description" id="book_description" class="custom-scroll"><?php echo $this->book->getDescription(); ?></textarea>
+                            </label>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="jarviswidget jarviswidget-sortable">
+            <header role="heading">
+                <h2><strong>Attached files</strong></h2>
+                <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
+            </header>
+            <div role="content">
+                <div class="widget-body padding-10">
+                    <div class="smart-form">
+                        <section class="col-sm-12 col-md-6 col-lg-6">
+                            <label class="label padding-10" for="book_image">Thumbnail</label>
+                            <label class="padding-10">
+                                <div class="imagesStack">
+                                    <?php if($this->book->getImage()) : ?>
+                                        <div class="imageBox smart-form">
+                                            <section>
+                                                <a class="btn btn-danger btn-sm" href="javascript:void(0)" onclick="removeImage(this)">
+                                                    <i class="fa fa-times-circle"></i>
+                                                    Remove
+                                                </a>
+                                            </section>
+                                            <img src="<?php echo $this->book->getImage(); ?>">
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                                <input type='hidden' name='book_image' value='<?php echo $this->book->getImage(); ?>'>
+                                <button class="margin-top-10 btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#imageUploaderModal">
+                                    Upload Image
+                                </button>
+                            </label>
+                        </section>
+                        <section class="col-sm-12 col-md-6 col-lg-6">
+                            <label class="label padding-10" for="book_pdf">PDF</label>
+                            <label class="padding-10">
+                                <div class="pdfStack">
+                                    <?php if($this->book->getPdf()) : ?>
+                                        <div class="imageBox smart-form">
+                                            <section>
+                                                <a class="btn btn-danger btn-sm" href="javascript:void(0)" onclick="removePdf(this)">
+                                                    <i class="fa fa-times-circle"></i>
+                                                    Remove
+                                                </a>
+                                            </section>
+                                            <a href="<?php echo $this->book->getPdf(); ?>" target="_blank">view pdf</a>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                                <input type='hidden' name='book_pdf' value='<?php echo $this->book->getPdf(); ?>'>
+                                <button class="margin-top-10 btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#pdfUploaderModal">
+                                    Upload PDF
+                                </button>
+                            </label>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-3">
+        <div class="well">
+            <p>
+                <button type="submit" class="triggers_if_this_element_in_viewport btn btn-lg btn-success">
+                    Save Book
+                </button>
+            </p>
+            <div class="smart-form">
+                <section>
+                    <label class="label" for="book_genre">Ganres</label>
+                    <label class="select">
+                        <select name="book_genre_ids[]" id="book_genre_ids" class="selectpicker" multiple data-live-search="true">
+                            <?php foreach ($this->genres as $genre) : ?>
+                                <option value="<?php echo $genre->getId(); ?>" <?php if ($this->book->hasGenre($genre)) { ?>selected="selected"<?php } ?>>
+                                    <?php echo $genre->getName(); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select><i></i>
+                    </label>
+                </section>
+                <section>
+                    <label class="label" for="book_status">Author</label>
+                    <label class="select">
+                        <select name="book_author_id" id="book_author_id" class="selectpicker" data-live-search="true">
+                            <option value="0"> - Select - </option>
+                            <?php if ($this->authors) : ?>
+                                <?php foreach ($this->authors as $author) : ?>
+                                    <option value="<?php echo $author->getId() ?>" <?php if ($this->book->getAuthor() == $author) { ?>selected="selected"<?php } ?>>
+                                        <?php echo $author->getName(); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </select><i></i>
+                    </label>
+                </section>
+                <section>
+                    <label class="label">Status</label>
+                    <label class="select">
+                        <select name="book_status" id="book_status">
+                            <option value="pending" <?php if ($this->book->getStatus() == 'pending') { ?>selected="selected"<?php } ?>>Pending</option>
+                            <option value="active" <?php if ($this->book->getStatus() == 'active') { ?>selected="selected"<?php } ?>>Active</option>
+                            <option value="inactive" <?php if ($this->book->getStatus() == 'inactive') { ?>selected="selected"<?php } ?>>Inactive</option>
+                        </select><i></i>
+                    </label>
+                </section>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+</div>
+
+<div class="modal fade" id="imageUploaderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    ×
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Image Upload</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 smart-form">
+                        <form action="<?php echo $this->url("upload", array("action" => "image")); ?>" method="post" data-type="image" class="imageUploadForm">
+                            <section>
+                                <div class="input input-file">
+                                    <span class="button">
+                                        <input type="file" id="file" name="file" class="imageUploadInput" onchange="this.parentNode.nextSibling.value = this.value">
+                                        Browse
+                                    </span>
+                                    <input type="text" placeholder="Include some files" readonly="">
+                                </div>
+                            </section>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="pdfUploaderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    ×
+                </button>
+                <h4 class="modal-title" id="myModalLabel">PDF Upload</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 smart-form">
+                        <form action="<?php echo $this->url("upload", array("action" => "pdf")); ?>" method="post" data-type="pdf" class="imageUploadForm">
+                            <section>
+                                <div class="input input-file">
+                                    <span class="button">
+                                        <input type="file" id="file" name="file" class="imageUploadInput" onchange="this.parentNode.nextSibling.value = this.value">
+                                        Browse
+                                    </span>
+                                    <input type="text" placeholder="Include some files" readonly="">
+                                </div>
+                            </section>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

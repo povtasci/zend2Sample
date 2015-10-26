@@ -1,0 +1,45 @@
+<?php if ($this->books) : ?>
+    <?php foreach ($this->books as $book) : ?>
+        <div class="row margin-bottom-10">
+            <div class="col-md-2">
+                <a href="/book/<?php echo $book->getId(); ?>">
+                    <img class="media-object" src="<?php echo $book->getImage(); ?>" alt="<?php echo $book->getTitle(); ?>" style="height: 150px;">
+                </a>
+            </div>
+            <div class="col-md-10">
+                <h4>
+                    <a href="/book/<?php echo $book->getId(); ?>">
+                    <?php echo $book->getTitle(); ?>
+                    </a>
+                </h4>
+                <h6>
+                    <a href="/author/<?php echo $book->getAuthor()->getId(); ?>">
+                        <?php echo $book->getAuthor()->getName(); ?>
+                    </a>
+                </h6>
+                <p>
+                    <?php echo $book->getDescription(); ?>
+                </p>
+                <?php if ($book->getGenres()) : ?>
+                    <p>
+                        <?php foreach ($book->getGenres() as $genre) : ?>
+                            <a href="/genre/<?php echo $genre->getId(); ?>" class="btn btn-primary btn-xs">
+                                <?php echo $genre->getName() ?>
+                            </a>
+                        <?php endforeach; ?>
+                    </p>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+    <?php if ($this->nextPage) : ?>
+        <div class="seeMoreBlock">
+            <a href="javascript:void(0)" onclick="getNextPage(<?php echo $this->nextPage; ?>, this)" class="nextMoreBtn btn btn-info btn-lg btn-block" data-genre="<?php echo $this->genre ? $this->genre->getId() : 0; ?>" data-author="<?php echo $this->author ? $this->author->getId() : 0; ?>">
+                See More
+            </a>
+            <div class="loader text-center hide">
+                <img src="/img/loader.gif">
+            </div>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>

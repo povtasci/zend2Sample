@@ -1,0 +1,73 @@
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa-fw fa fa-home"></i> Dashboard <span>> Authors</span>
+        </h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="well">
+            <?php if (!$this->paginator) : ?>
+                <div class="alert alert-warning fade in">
+                    <button class="close" data-dismiss="alert">
+                        ×
+                    </button>
+                    <i class="fa-fw fa fa-warning"></i>
+                    <strong>Warning</strong> You don't have any books.
+                </div>
+            <?php else : ?>
+                <div class="widget-body">
+                    <?php
+                    echo $this->paginationControl(
+                        $this->paginator,
+                        'sliding',
+                        'partial/paginator.phtml',
+                        array('route' => 'authors')
+                    );
+                    ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <?php foreach ($this->paginator as $author) : ?>
+                                <tr>
+                                    <td>
+                                        <?php echo $author->getId(); ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $author->getName(); ?>
+                                    </td>
+                                    <td>
+                                        <a href="<?php echo $this->url("admin", array("action" => "edit-author", "id" => $author->getId())); ?>" class="btn btn-info btn-xs">
+                                            Edit
+                                        </a>
+                                        <a href="javascript:void(0)" onclick="deleteAuthor(this, <?php echo $author->getId(); ?>)" class="btn btn-danger btn-xs">
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <?php
+                    echo $this->paginationControl(
+                        $this->paginator,
+                        'sliding',
+                        'partial/paginator.phtml',
+                        array('route' => 'authors')
+                    );
+                    ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>

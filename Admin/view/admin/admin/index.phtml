@@ -1,0 +1,82 @@
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-home"></i> Dashboard <span>> Books</span>
+        </h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="well">
+            <?php if (!$this->paginator) : ?>
+                <div class="alert alert-warning fade in">
+                    <button class="close" data-dismiss="alert">
+                        ×
+                    </button>
+                    <i class="fa-fw fa fa-warning"></i>
+                    <strong>Warning</strong> You don't have any books.
+                </div>
+            <?php else : ?>
+                <div class="widget-body">
+                    <?php
+                    echo $this->paginationControl(
+                        $this->paginator,
+                        'sliding',
+                        'partial/paginator.phtml',
+                        array('route' => 'admin')
+                    );
+                    ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Title</th>
+                                <th>Status</th>
+                                <th>Created At</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <?php foreach ($this->paginator as $book) : ?>
+                                <tr>
+                                    <td>
+                                        <?php echo $book->getId(); ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $book->getTitle(); ?>
+                                    </td>
+                                    <td>
+                                        <span class="label label-success">
+                                            <?php echo $book->getStatus(); ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <?php echo date("d F, H:i", strtotime($book->getCreatedAt())); ?>
+                                    </td>
+                                    <td>
+                                        <a href="<?php echo $this->url("admin", array("action" => "edit-book", "id" => $book->getId())); ?>" class="btn btn-info btn-xs">
+                                            Edit
+                                        </a>
+                                        <a href="javascript:void(0)" onclick="deleteBook(this, <?php echo $book->getId(); ?>)" class="btn btn-danger btn-xs">
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <?php
+                    echo $this->paginationControl(
+                        $this->paginator,
+                        'sliding',
+                        'partial/paginator.phtml',
+                        array('route' => 'admin')
+                    );
+                    ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>

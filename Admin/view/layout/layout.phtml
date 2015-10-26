@@ -1,0 +1,231 @@
+<?php echo $this->doctype(); ?>
+<?php
+$children = $this->viewModel()->getCurrent()->getChildren();
+$viewModel = $children[0];
+$layoutViewModel = $this->viewModel()->getRoot();
+$user = $layoutViewModel->headerUser;
+?>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <title> Admin </title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Basic Styles -->
+    <link rel="stylesheet" type="text/css" media="screen" href="/admin-files/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/admin-files/css/font-awesome.min.css">
+
+    <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+    <link rel="stylesheet" type="text/css" media="screen" href="/admin-files/css/smartadmin-production-plugins.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/admin-files/css/smartadmin-production.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/admin-files/css/smartadmin-skins.min.css">
+
+    <!-- SmartAdmin RTL Support  -->
+    <link rel="stylesheet" type="text/css" media="screen" href="/admin-files/css/smartadmin-rtl.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/bootstrap-select.css">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="/admin-files/css/admin.css">
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="/admin-files/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/admin-files/img/favicon/favicon.ico" type="image/x-icon">
+
+    <!-- GOOGLE FONT -->
+    <link rel="stylesheet" type='text/css' href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+
+    <!-- Specifying a Webpage Icon for Web Clip-->
+    <link rel="apple-touch-icon" href="/admin-files/img/splash/sptouch-icon-iphone.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/admin-files/img/splash/touch-icon-ipad.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/admin-files/img/splash/touch-icon-iphone-retina.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/admin-files/img/splash/touch-icon-ipad-retina.png">
+
+    <!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- Startup image for web apps -->
+    <link rel="apple-touch-startup-image" href="/admin-files/img/splash/ipad-landscape.png"
+          media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+    <link rel="apple-touch-startup-image" href="/admin-files/img/splash/ipad-portrait.png"
+          media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+    <link rel="apple-touch-startup-image" href="/admin-files/img/splash/iphone.png"
+          media="screen and (max-device-width: 320px)">
+
+</head>
+<body class=""><!-- HEADER -->
+<header id="header">
+    <div id="logo-group">
+        <span id="logo"> <img src="/admin-files/img/logo-blue.png" alt="SmartAdmin"> </span>
+    </div>
+    <div class="pull-right">
+        <?php if ($viewModel->activeTab != "login") : ?>
+        <!-- collapse menu button -->
+        <div id="hide-menu" class="btn-header pull-right">
+            <span> <a href="javascript:void(0);" data-action="toggleMenu" title="Collapse Menu"><i
+                        class="fa fa-reorder"></i></a> </span>
+        </div>
+        <!-- end collapse menu -->
+
+        <!-- logout button -->
+        <div id="logout" class="btn-header transparent pull-right">
+            <span> <a href="/admin/logout" title="Sign Out" data-action="userLogout"
+                      data-logout-msg="You can improve your security further after logging out by closing this opened browser"><i
+                        class="fa fa-sign-out"></i></a> </span>
+        </div>
+        <!-- end logout button -->
+
+        <!-- search mobile button (this is hidden till mobile view port) -->
+        <div id="search-mobile" class="btn-header transparent pull-right">
+            <span> <a href="javascript:void(0)" title="Search"><i class="fa fa-search"></i></a> </span>
+        </div>
+        <!-- end search mobile button -->
+
+        <!-- input: search field -->
+        <form action="search.html" class="header-search pull-right">
+            <input id="search-fld" type="text" name="param" placeholder="Search">
+            <button type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+            <a href="javascript:void(0);" id="cancel-search-js" title="Cancel Search"><i class="fa fa-times"></i></a>
+        </form>
+        <!-- end input: search field -->
+
+        <!-- fullscreen button -->
+        <div id="fullscreen" class="btn-header transparent pull-right">
+            <span> <a href="javascript:void(0);" data-action="launchFullscreen" title="Full Screen"><i
+                        class="fa fa-arrows-alt"></i></a> </span>
+        </div>
+        <!-- end fullscreen button -->
+        <?php endif; ?>
+    </div>
+    <!-- end pulled right: nav area -->
+
+</header>
+<!-- END HEADER -->
+<!-- Note: This width of the aside area can be adjusted through LESS variables -->
+<?php if ($viewModel->activeTab != "login") : ?>
+<aside id="left-panel">
+    <!-- NAVIGATION : This navigation is also responsive-->
+    <nav>
+        <ul>
+            <li>
+                <a href="<?php echo $this->url("application"); ?>" title="Site" target="_blank">
+                    <i class="fa fa-lg fa-fw fa-home"></i>
+                    <span class="menu-item-parent">Site</span>
+                </a>
+            </li>
+            <li<?php if ($viewModel->activeTab == "books") { ?> class="active"<?php } ?>>
+                <a href="javascript:void(0)">
+                    <i class="fa fa-lg fa-fw fa-file-text"></i>
+                    <span class="menu-item-parent">Books</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href="<?php echo $this->url("admin", array("action" => "index")); ?>">
+                            Books
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo $this->url("admin", array("action" => "add-book")); ?>">
+                            Add New Book
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li<?php if ($viewModel->activeTab == "authors") { ?> class="active"<?php } ?>>
+                <a href="javascript:void(0)">
+                    <i class="fa fa-lg fa-fw fa-male"></i>
+                    <span class="menu-item-parent">Authors</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href="<?php echo $this->url("admin", array("action" => "authors")); ?>">
+                            Authors
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo $this->url("admin", array("action" => "add-author")); ?>">
+                            Add New Author
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li<?php if ($viewModel->activeTab == "genres") { ?> class="active"<?php } ?>>
+                <a href="javascript:void(0)">
+                    <i class="fa fa-lg fa-fw fa-list"></i>
+                    <span class="menu-item-parent">Genres</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href="<?php echo $this->url("admin", array("action" => "genres")); ?>">
+                            Genres
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo $this->url("admin", array("action" => "add-genre")); ?>">
+                            Add New Genre
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+			<span class="minifyme" data-action="minifyMenu">
+				<i class="fa fa-arrow-circle-left hit"></i>
+			</span>
+
+</aside>
+<?php endif; ?>
+<!-- END NAVIGATION -->
+<!-- MAIN PANEL -->
+<div id="main" role="main" <?php if ($viewModel->activeTab == "login") { ?>style="margin-left:0;" <?php } ?>>
+    <!-- MAIN CONTENT -->
+    <div id="content">
+        <?php echo $this->content; ?>
+    </div>
+    <!-- END MAIN CONTENT -->
+
+</div>
+<!-- PAGE FOOTER -->
+<div class="page-footer">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <span class="txt-color-white">Skeleton - Admin © 2015</span>
+        </div>
+    </div>
+</div>
+<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+<script data-pace-options='{ "restartOnRequestAfter": true }' src="/admin-files/js/plugin/pace/pace.min.js"></script>
+<!--[if IE 8]>
+<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+<![endif]-->
+<?php
+echo $this->headScript()
+    ->prependFile($this->basePath() . '/admin-files/js/admin.js?v=' . filemtime(PUBLIC_PATH . "/admin-files/js/admin.js"))
+    ->prependFile($this->basePath() . '/js/bootstrap-select.js')
+    ->prependFile($this->basePath() . '/admin-files/js/plugin/fullcalendar/jquery.fullcalendar.min.js')
+    ->prependFile($this->basePath() . '/admin-files/js/plugin/moment/moment.min.js')
+    ->prependFile($this->basePath() . '/js/jquery.form.min.js')
+    ->prependFile($this->basePath() . '/admin-files/js/plugin/ckeditor/ckeditor.js')
+    ->prependFile($this->basePath() . '/admin-files/js/app.min.js')
+    ->prependFile($this->basePath() . '/admin-files/js/plugin/fastclick/fastclick.min.js')
+    ->prependFile($this->basePath() . '/admin-files/js/plugin/msie-fix/jquery.mb.browser.min.js')
+    ->prependFile($this->basePath() . '/admin-files/js/plugin/bootstrap-slider/bootstrap-slider.min.js')
+    ->prependFile($this->basePath() . '/admin-files/js/plugin/select2/select2.min.js')
+    ->prependFile($this->basePath() . '/admin-files/js/plugin/masked-input/jquery.maskedinput.min.js')
+    ->prependFile($this->basePath() . '/admin-files/js/plugin/jquery-validate/jquery.validate.min.js')
+    ->prependFile($this->basePath() . '/admin-files/js/plugin/sparkline/jquery.sparkline.min.js')
+    ->prependFile($this->basePath() . '/admin-files/js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js')
+    ->prependFile($this->basePath() . '/admin-files/js/smartwidgets/jarvis.widget.min.js')
+    ->prependFile($this->basePath() . '/admin-files/js/notification/SmartNotification.min.js')
+    ->prependFile($this->basePath() . '/admin-files/js/bootstrap/bootstrap.min.js')
+    ->prependFile($this->basePath() . '/admin-files/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js')
+    ->prependFile($this->basePath() . '/admin-files/js/app.config.js')
+    ->prependFile($this->basePath() . '/admin-files/js/libs/jquery-ui-1.10.3.min.js')
+    ->prependFile($this->basePath() . '/admin-files/js/libs/jquery-2.1.1.min.js')
+?>
+</body>
+</html>
